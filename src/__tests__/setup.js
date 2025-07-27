@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom'
 import 'whatwg-fetch'
-import { afterEach, beforeEach, vi } from 'vitest'
-import { cleanup } from '@testing-library/react'
+import { vi } from 'vitest'
 
 // Mock data
 const mockMovies = [
@@ -23,33 +22,27 @@ const mockDirectors = [
   { id: 3, name: "Edward Zwick", movies: ["Jack Reacher: Never Go Back", "Blood Diamond", "The Siege"] }
 ];
 
-beforeEach(() => {
-  global.fetch = vi.fn((url) => {
-    if (url.includes('/movies/1')) {
-      return Promise.resolve({
-        json: () => Promise.resolve(mockMovies[0])
-      });
-    }
-    if (url.includes('/movies')) {
-      return Promise.resolve({
-        json: () => Promise.resolve(mockMovies)
-      });
-    }
-    if (url.includes('/actors')) {
-      return Promise.resolve({
-        json: () => Promise.resolve(mockActors)
-      });
-    }
-    if (url.includes('/directors')) {
-      return Promise.resolve({
-        json: () => Promise.resolve(mockDirectors)
-      });
-    }
-    return Promise.reject(new Error('Unknown URL'));
-  });
+// Mock fetch globally
+global.fetch = vi.fn((url) => {
+  if (url.includes('/movies/1')) {
+    return Promise.resolve({
+      json: () => Promise.resolve(mockMovies[0])
+    });
+  }
+  if (url.includes('/movies')) {
+    return Promise.resolve({
+      json: () => Promise.resolve(mockMovies)
+    });
+  }
+  if (url.includes('/actors')) {
+    return Promise.resolve({
+      json: () => Promise.resolve(mockActors)
+    });
+  }
+  if (url.includes('/directors')) {
+    return Promise.resolve({
+      json: () => Promise.resolve(mockDirectors)
+    });
+  }
+  return Promise.reject(new Error('Unknown URL'));
 });
-
-afterEach(() => {
-  cleanup();
-  vi.restoreAllMocks();
-})
