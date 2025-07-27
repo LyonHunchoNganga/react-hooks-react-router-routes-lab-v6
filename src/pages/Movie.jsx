@@ -12,6 +12,19 @@ function Movie() {
       .then(data => setMovie(data));
   }, [params.id]);
 
+  if (!movie.title) {
+    return (
+      <>
+        <header>
+          <NavBar />
+        </header>
+        <main>
+          <h1>Loading...</h1>
+        </main>
+      </>
+    );
+  }
+
   return (
     <>
       <header>
